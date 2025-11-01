@@ -8,43 +8,28 @@
  *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
  * }
  */
-
 class Solution {
     public ListNode modifiedList(int[] nums, ListNode head) {
-        Set<Integer> toBeDel = new HashSet<>();
-        for(var num : nums)toBeDel.add(num);
-        ListNode dummyHead = new ListNode();
-        dummyHead.next = head;
-        ListNode curr = dummyHead, prev = dummyHead;
-        while(curr != null){
-            ListNode nextNode = curr.next;
-            if(toBeDel.contains(curr.val)){
-                prev.next = nextNode;
-            }else{
-                prev = curr;
-            }
-            curr = nextNode;
+        int max = -1;
+        for(int num : nums ){
+            max = num > max ? num : max;
         }
-        return dummyHead.next;
+        boolean[] freq = new boolean[max+1];
+
+        for(int num : nums) freq[num] = true;
+
+        ListNode temp = new ListNode();
+        ListNode current = temp;
+
+        while(head != null){
+            if( head.val >= freq.length || freq[head.val] == false){
+                current.next = head;
+                current = current.next;
+            }
+            head = head.next;
+        }
+
+        current.next = null;
+        return temp.next;
     }
 }
-
-// class Solution {
-//     public ListNode modifiedList(int[] nums, ListNode head) {
-//         List<Integer> l = new ArrayList<>();
-//         for(int i:nums) {
-//             l.add(i);
-//         }
-//         ListNode dummy = new ListNode();
-//         dummy.next = head;
-//         ListNode curr = dummy;
-//         ListNode prev = dummy;
-//         while(curr != null) {
-//             ListNode nextNode = curr.next;
-//             if(l.contains(curr.val)) prev.next = nextNode;
-//             else prev = curr;
-//             curr = nextNode;
-//         }
-//         return dummy.next;
-//     }
-// }
