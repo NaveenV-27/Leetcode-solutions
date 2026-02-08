@@ -14,21 +14,27 @@
  * }
  */
 class Solution {
-    static int heightOfTree(TreeNode root) {
+
+    private int subHeight(TreeNode root) {
         if(root == null) {
             return 0;
         }
-        int left = heightOfTree(root.left);
-        int right = heightOfTree(root.right);
-        if(left==-1 || right == -1) return -1;
-        if(Math.abs(left-right)>1) return -1;
-        return Math.max(left, right) + 1;
-    }
-    public boolean isBalanced(TreeNode root) {
-        if(root == null) {
-            return true;
+        int left = subHeight(root.left) + 1;
+        int right = subHeight(root.right) + 1;
+        if(left == 0 || right == 0 || Math.abs(left - right) > 1) {
+            // System.out.println(left + ", " + right + " -> " + Math.abs(left - right));
+            return -1;
+        } else {
+            return Math.max(left, right);
         }
-        if(heightOfTree(root) == -1) return false;
-        return true;
     }
+
+    public boolean isBalanced(TreeNode root) {
+        return subHeight(root) != -1; 
+    }
+    // static {
+    //     Runtime.getRuntime().addShutdownHook(new Thread(()-> {
+    //         System.gc();
+    //     }));
+    // }
 }
